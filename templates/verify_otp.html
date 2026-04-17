@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-card">
+    <h1>Two-Factor Authentication</h1>
+    <p class="muted">Enter the 6-digit OTP printed in your Flask terminal.</p>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        {% for field in form %}
+            {% if field.errors %}
+                <div class="form-error">
+                    <strong>{{ field.label.text }}:</strong>
+                    {{ field.errors|join(", ") }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+
+        <label>OTP Code</label>
+        {{ form.otp(placeholder="123456", maxlength="6") }}
+
+        <button type="submit">Verify OTP</button>
+    </form>
+</section>
+{% endblock %}

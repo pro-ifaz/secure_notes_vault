@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-card wide">
+    <h1>{{ mode }} Secure Note</h1>
+    <p class="muted">Input is sanitized and saved only under your user account.</p>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        {% for field in form %}
+            {% if field.errors %}
+                <div class="form-error">
+                    <strong>{{ field.label.text }}:</strong>
+                    {{ field.errors|join(", ") }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+
+        <label>Title</label>
+        {{ form.title(placeholder="Note title") }}
+
+        <label>Body</label>
+        {{ form.body(placeholder="Write your private note...", rows="8") }}
+
+        <button type="submit">{{ mode }} Note</button>
+    </form>
+
+    <p class="small">
+        <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
+    </p>
+</section>
+{% endblock %}

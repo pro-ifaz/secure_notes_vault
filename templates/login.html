@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-card">
+    <h1>Secure Login</h1>
+    <p class="muted">Username, password, OTP, account lockout, and secure session protection.</p>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        {% for field in form %}
+            {% if field.errors %}
+                <div class="form-error">
+                    <strong>{{ field.label.text }}:</strong>
+                    {{ field.errors|join(", ") }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+
+        <label>Username</label>
+        {{ form.username(placeholder="Enter username") }}
+
+        <label>Password</label>
+        {{ form.password(placeholder="Enter password") }}
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="small">
+        <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+        ·
+        <a href="{{ url_for('register') }}">Create account</a>
+    </p>
+</section>
+{% endblock %}

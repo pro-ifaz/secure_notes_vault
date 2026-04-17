@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="dashboard-header">
+    <div>
+        <h1>Welcome, {{ session.get("username") }}</h1>
+        <p class="muted">Your private notes are protected by multi-layer authentication.</p>
+    </div>
+    <a class="button-link" href="{{ url_for('new_note') }}">+ New Note</a>
+</section>
+
+<section class="security-grid">
+    <div class="status-card">✅ 2FA verified</div>
+    <div class="status-card">✅ Password hashed</div>
+    <div class="status-card">✅ CSRF protected</div>
+    <div class="status-card">✅ SQL Injection protected</div>
+    <div class="status-card">✅ XSS protected</div>
+    <div class="status-card">✅ Secure session active</div>
+</section>
+
+<section class="content-grid">
+    <div class="notes-panel">
+        <form class="search-bar" method="GET">
+            <input name="q" value="{{ query }}" placeholder="Search your notes securely">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if notes %}
+            <div class="notes-grid">
+                {% for note in notes %}
+                    <article class="note-card">
+                        <h3>{{ note.title }}</h3>
+                        <p>{{ note.body }}</p>
+                        <small>Updated: {{ note.updated_at[:19].replace("T", " ") }} UTC</small>
+                        <div class="note-actions">
+                            <a href="{{ url_for('edit_note', note_id=note.id) }}">Edit</a>
+                            <form method="POST" action="{{ url_for('delete_note') }}">
+                                {{ delete_form.hidden_tag() }}
+                                <input type="hidden" name="note_id" value="{{ note.id }}">
+                                <button class="danger-btn" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No notes found</h3>
+                <p>Create your first protected note.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <aside class="log-panel">
+        <h2>Security Activity Log</h2>
+        {% for log in logs %}
+            <div class="log-item">
+                <strong>{{ log.event }}</strong>
+                <span>{{ log.created_at[:19].replace("T", " ") }} UTC</span>
+            </div>
+        {% else %}
+            <p class="muted">No activity yet.</p>
+        {% endfor %}
+    </aside>
+</section>
+{% endblock %}
