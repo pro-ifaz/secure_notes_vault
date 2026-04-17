@@ -33,9 +33,9 @@
                         <small>Updated: {{ note.updated_at.strftime("%Y-%m-%d %H:%M:%S") }} UTC</small>
                         <div class="note-actions">
                             <a href="{{ url_for('edit_note', note_id=note.id) }}">Edit</a>
-                            <form method="POST" action="{{ url_for('delete_note') }}">
-                                {{ delete_form.hidden_tag() }}
-                                <input type="hidden" name="note_id" value="{{ note.id }}">
+                           <form method="POST" action="{{ url_for('delete_note') }}">
+                                {{ delete_form.csrf_token }}
+                                {{ delete_form.note_id(value=note.id) }}
                                 <button class="danger-btn" type="submit">Delete</button>
                             </form>
                         </div>
