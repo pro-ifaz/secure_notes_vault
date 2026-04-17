@@ -480,13 +480,22 @@ def delete_note():
     if form.validate_on_submit():
         note_id = int(form.note_id.data)
 
-        execute(
-            "DELETE FROM notes WHERE id = %s AND user_id = %s",
-            (note_id, session["user_id"])
-        )
+        conn = get_db()
+        with conn.cursor() as cur:
+            cur.execute(
+                "DELETE FROM notes WHERE id = %s AND user_id = %s",
+                (note_id, session["user_id"])
+            )
+            deleted_rows = cur.rowcount
+        conn.commit()
 
-        log_activity(session["user_id"], "Deleted a secure note")
-        flash("Note deleted.", "success")
+        if deleted_rows > 0:
+            log_activity(session["user_id"], "Deleted a secure note")
+            flash("Note deleted.", "success")
+        else:
+            flash("No note was deleted.", "danger")
+    else:
+        flash(f"Delete request failed validation: {form.errors}", "danger")
 
     return redirect(url_for("dashboard"))
 
