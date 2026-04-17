@@ -30,7 +30,7 @@
                     <article class="note-card">
                         <h3>{{ note.title }}</h3>
                         <p>{{ note.body }}</p>
-                        <small>Updated: {{ note.updated_at[:19].replace("T", " ") }} UTC</small>
+                        <small>Updated: {{ note.updated_at.strftime("%Y-%m-%d %H:%M:%S") }} UTC</small>
                         <div class="note-actions">
                             <a href="{{ url_for('edit_note', note_id=note.id) }}">Edit</a>
                             <form method="POST" action="{{ url_for('delete_note') }}">
@@ -55,7 +55,7 @@
         {% for log in logs %}
             <div class="log-item">
                 <strong>{{ log.event }}</strong>
-                <span>{{ log.created_at[:19].replace("T", " ") }} UTC</span>
+                <span>{{ log.created_at.strftime("%Y-%m-%d %H:%M:%S") }} UTC</span>
             </div>
         {% else %}
             <p class="muted">No activity yet.</p>
